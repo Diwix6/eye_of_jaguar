@@ -2,7 +2,7 @@
 
 ## Overview
 
-Eye of Jaguar is a site designed for engineerign hakathon project. This project leverages [mention any key technologies or libraries used, e.g., "OpenCV, TensorFlow, etc."] to provide [describe the main functionalities, e.g., "real-time image processing and analysis"].
+Eye of Jaguar is a site designed for engineerign hakathon project. 
 ## Installation
 
 To get started with Eye of Jaguar, follow these steps:
@@ -16,7 +16,7 @@ To get started with Eye of Jaguar, follow these steps:
 2. **Create a virtual environment** (optional but recommended):
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   source venv/bin/activate
    ```
 
 3. **Install dependencies**:
