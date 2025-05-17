@@ -12,19 +12,19 @@
         body {
             display: flex;
             flex-direction: column;
-            min-height: 100vh; /* Минимальная высота 100% высоты окна */
+            min-height: 100vh;
         }
 
         .content {
-            flex: 1; /* Занимает доступное пространство */
+            flex: 1;
             display: flex;
-            align-items: center; /* Вертикальное выравнивание по центру */
-            justify-content: center; /* Горизонтальное выравнивание по центру */
+            align-items: center; 
+            justify-content: center;
         }
 
         .buffet-card {
-            border-radius: 15px; /* Скругленные края */
-            height: 300px; /* Фиксированная высота для карточек */
+            border-radius: 15px;
+            height: 300px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -32,18 +32,18 @@
             text-align: center;
             margin-bottom: 20px;
             cursor: pointer;
-            transition: transform 0.2s; /* Плавный эффект при наведении */
+            transition: transform 0.2s;
         }
 
         .buffet-card:hover {
-            transform: scale(1.05); /* Увеличение карточки при наведении */
+            transform: scale(1.05);
         }
 
         .buffet-image {
-            width: 100%; /* Ширина изображения */
-            height: 150px; /* Фиксированная высота для изображения */
-            object-fit: cover; /* Обрезка изображения */
-            border-radius: 15px 15px 0 0; /* Скругление верхних углов */
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 15px 15px 0 0;
         }
 
         footer {
@@ -95,8 +95,8 @@
                     <img src="{{ buffet.image }}" class="buffet-image" alt="{{ buffet.name }}">
                     <div class="card-body">
                         <h5 class="card-title">{{ buffet.name }}</h5>
-                        <p class="card-text">Количество человек: <strong>{{ buffet.people }}</strong></p>
-                        <p class="card-text">Количество оставшейся еды: <strong>{{ buffet.food }}</strong></p>
+                            <p class="card-text" id="peopleStatus-{{ loop.index }}">Количество человек: <strong>{{ buffet.people }}</strong></p>                        
+                            <p class="card-text">Количество оставшейся еды: <strong>{{ buffet.food }}</strong></p>
                     </div>
                 </div>
             </div>
@@ -119,6 +119,31 @@
         });
     });
 </script>
+
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Проходим по всем элементам с id, начинающимся на "peopleStatus-"
+        const statusElements = document.querySelectorAll('[id^="peopleStatus-"]');
+
+        statusElements.forEach(function(statusElement) {
+            const peopleStatus = statusElement.querySelector('strong').textContent; // Получаем текстовое содержимое
+
+            // Устанавливаем цвет в зависимости от состояния
+            if (peopleStatus === "свободно") {
+                statusElement.style.color = 'gray'; // Серый цвет
+            } else if (peopleStatus === "мало") {
+                statusElement.style.color = 'green'; // Зеленый цвет
+            } else if (peopleStatus === "средне") {
+                statusElement.style.color = ''; // Желтый цвет
+            } else if (peopleStatus === "заполнено") {
+                statusElement.style.color = 'brown'; // Коричневый цвет
+            }
+        });
+    });
+
+</script>
+
 </body>
 
 <footer>
