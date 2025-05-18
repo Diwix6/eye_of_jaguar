@@ -23,3 +23,11 @@ To get started with Eye of Jaguar, follow these steps:
    ```bash
    pip install -r requirements.txt
    ```
+4. **Run database migrations (if applicable):
+   ```bash
+   python manage.py migrate
+   ```
+5. **Run the development server:
+   ```bash
+   python manage.py runserver
+   ```
