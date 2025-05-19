@@ -2,3 +2,5 @@ venv/
 app/__pycache__/
 app/migrations/
 .DS_Store
+eye_of_yaguar/__pycache__
+inference.pt
