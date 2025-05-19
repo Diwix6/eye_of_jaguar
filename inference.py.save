@@ -1,0 +1,32 @@
+from ultralytics import YOLO
+import cv2
+from picamera2 import Picamera2
+import time
+
+
+def run():
+
+    model = YOLO("inference.pt")
+
+    hqCamera = Picamera2()
+    hqCamera.start()
+    while 1:
+        a = hqCamera.capture_array()
+        a = cv2.cvtColor(a, cv2.COLOR_RGBA2RGB)
+        results = model(a)
+
+            # Visualize the results on the frame
+        annotated_frame = results[0].plot()
+
+            # Display the annotated frame
+        cv2.imshow("YOLO Inference", annotated_frame)
+
+            # Break the loop if 'q' is pressed
+        time.sleep(2)
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+            break
+    cv2.destroyAllWindows()
+
+if __name__ == '__main__':
+    try:
+     run()

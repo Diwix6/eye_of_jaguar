@@ -1,0 +1,9 @@
+venv/
+app/__pycache__/
+app/migrations/
+.DS_Store
+eye_of_yaguar/__pycache__
+inference_old.pt
+inference_old_2.pt
+inference_old_3.pt
+inference_old_4.pt

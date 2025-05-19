@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="static/css/bootstrap.css" rel="stylesheet" />
+    <script src="static/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> <!-- Используйте полную версию jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+        }
+
+        .buffet-card {
+            border-radius: 15px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .buffet-card:hover {
+            transform: scale(1.05);
+        }
+
+        .buffet-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 15px 15px 0 0;
+        }
+
+        footer {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+            width: 100%;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            text-align: center;
+        }
+
+        .food-list li {
+            margin-bottom: 6px;
+            font-size: 1.1em;
+        }
+        
+        .expanded-card {
+            height: auto !important;
+            transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+        }
+
+
+        @media (max-width: 768px) {
+            .buffet-card {
+                height: auto; /* Позволяет карточкам адаптироваться к содержимому */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Буфеты</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Контакты</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            {% for buffet in buffets %}
+            <div class="col-md-4">
+                <div class="card buffet-card bg-light" 
+                     data-buffet="{{ buffet.name }}" 
+                     data-people="{{ buffet.people }}" 
+                     data-food="{{ buffet.food }}">
+                    <img src="{{ buffet.image }}" class="buffet-image" alt="{{ buffet.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ buffet.name }}</h5>
+                            <p class="card-text" id="peopleStatus-{{ loop.index }}">Количество человек: <strong>{{ buffet.people }}</strong></p>                        
+                            <p class="card-text">Количество оставшейся еды: 
+                                <ul class="food-list">
+                                {% for key, value in buffet.food.items %}
+                                    <li><strong>{{ key }}: {{ value }}</strong></li>
+                                {% empty %}
+                                    <li>Нет данных</li>
+                                {% endfor %}
+                                </ul>
+                            </p>
+                    </div>
+                    <div class="card-details" style="display: none;">
+                        <p>Буфет работает с 9:00 до 17:00.</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    
+    </div>
+
+<script>
+    $(document).ready(function() {
+        $('.list-group-item').click(function() {
+            var buffetName = $(this).data('buffet');
+            var peopleCount = $(this).data('people');
+            var foodCount = $(this).data('food');
+
+            $('#buffetName').text(buffetName);
+            $('#peopleCount').text(peopleCount);
+            $('#foodCount').text(foodCount);
+            $('#buffetInfo').show();
+        });
+    });
+</script>
+
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Проходим по всем элементам с id, начинающимся на "peopleStatus-"
+        const statusElements = document.querySelectorAll('[id^="peopleStatus-"]');
+
+        statusElements.forEach(function(statusElement) {
+            const peopleStatus = statusElement.querySelector('strong').textContent; // Получаем текстовое содержимое
+
+            // Устанавливаем цвет в зависимости от состояния
+            if (peopleStatus === "свободно") {
+                statusElement.style.color = 'green'; // Серый цвет
+            } else if (peopleStatus === "мало") {
+                statusElement.style.color = 'd8a71d'; // Зеленый цвет
+            } else if (peopleStatus === "средне") {
+                statusElement.style.color = 'orange'; // Желтый цвет
+            } else if (peopleStatus === "заполнено") {
+                statusElement.style.color = 'brown'; // Коричневый цвет
+            }
+        });
+    });
+
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const cards = document.querySelectorAll('.buffet-card');
+
+        cards.forEach(function(card) {
+            card.addEventListener('click', function() {
+                const details = card.querySelector('.card-details');
+                
+                // Скрыть/показать блок
+                if (details.style.display === "none") {
+                    details.style.display = "block";
+                    card.classList.add("expanded-card");
+                } else {
+                    details.style.display = "none";
+                    card.classList.remove("expanded-card");
+                }
+            });
+        });
+    });
+</script>
+
+
+</body>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 ООО "Ягуар Инференс". Все права защищены.</p>
+    </div>
+</footer>
+
+
+</html>
